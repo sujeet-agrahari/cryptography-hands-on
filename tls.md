@@ -77,3 +77,28 @@ The server's public key is typically included in its digital certificate, which 
 Because the server's key pair is used for key exchange, it is the same for all clients that connect to it. However, the session key that is exchanged between the client and server is unique for each TLS session and is generated randomly by the client. This provides a way for each session to use a different key for symmetric encryption, even though the same key pair is used for key exchange.
 
 It's worth noting that there are some TLS extensions, such as the "pre-shared key" (PSK) extension, that allow for different key pairs to be used for different clients. PSK allows the client and server to authenticate each other using a shared secret key, rather than relying on digital certificates. In this case, the server would need to maintain a different PSK for each client that connects to it. However, this is not the standard way that TLS is typically used.
+
+
+During the TLS handshake, the client and server exchange messages to establish a secure connection. This includes the exchange of public keys (which are used for encryption and decryption) and the generation of shared secrets that will be used to derive session keys for encrypting and decrypting data.
+
+The TLS handshake typically involves the following steps:
+
+The client sends a "hello" message to the server, which includes the highest version of TLS that the client supports and a random number.
+
+The server responds with a "hello" message that includes the version of TLS that will be used for the connection, a random number, and the server's public key certificate.
+
+The client verifies the server's certificate and generates a random pre-master secret, which is encrypted with the server's public key and sent to the server.
+
+The server decrypts the pre-master secret using its private key, and uses it to generate a master secret.
+
+The client and server independently use the master secret, along with the random numbers exchanged earlier, to generate the same session keys.
+
+The client and server exchange "finished" messages to confirm that the handshake was successful, and communication using the session keys can begin.
+
+In step 5, AES is often used as the symmetric encryption algorithm to generate the session keys from the master secret. Specifically, AES in CBC (Cipher Block Chaining) mode is commonly used to derive the session keys.
+
+Once the session keys are generated, they are used to encrypt and decrypt data transmitted between the client and server, providing strong security for the communication.
+
+
+
+
